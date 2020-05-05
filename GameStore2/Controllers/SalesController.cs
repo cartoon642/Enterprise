@@ -12,6 +12,7 @@ using Microsoft.AspNet.Identity;
 
 namespace GameStore2.Controllers
 {
+    [RequireHttps]
     [Authorize]
     public class SalesController : Controller
     {
@@ -95,12 +96,13 @@ namespace GameStore2.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            Sale sale = db.Sales.Find(id);
+            Sale sale = db.Sales.Include(s => s.Game).Include(s => s.Quality).Include(s => s.User).SingleOrDefault(x => x.Id == id);
             var loggedInUser = User.Identity.GetUserId();
             if (sale.Userid != loggedInUser)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+                return RedirectToAction("Index");
             }
+            ViewBag.userid = User.Identity.GetUserId();
             if (sale == null)
             {
                 return HttpNotFound();
@@ -140,12 +142,12 @@ namespace GameStore2.Controllers
             }
 
             Sale sale = db.Sales.Include(s => s.Game).Include(s => s.Quality).Include(s => s.User).SingleOrDefault(x => x.Id == id);
-            
-            
+
+            ViewBag.userid = User.Identity.GetUserId();
             var loggedInUser = User.Identity.GetUserId();
             if (sale.Userid != loggedInUser)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+                return RedirectToAction("Index");
             }
 
             if (sale == null)

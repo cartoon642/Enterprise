@@ -58,11 +58,11 @@ namespace GameStore2
             //   appId: "",
             //   appSecret: "");
 
-            //app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
-            //{
-            //    ClientId = "",
-            //    ClientSecret = ""
-            //});
+            app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
+            {
+                ClientId = "16494473998-kiia2tbmbc9uorhh7sdp461go37j50ju.apps.googleusercontent.com",
+                ClientSecret = "HdrKjirQJC8wCNZfhJ8AP5SB"
+            });
         }
     }
 }

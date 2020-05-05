@@ -1,8 +1,10 @@
 ﻿@model GameStore2.Models.Sale
 
 @{
+    var userid = ViewBag.userid;
     ViewBag.Title = "Delete";
 }
+
 
 <h2>Delete</h2>
 
@@ -52,13 +54,25 @@
         </dd>
 
     </dl>
+    @if (userid == Model.User.Id)
+    {
+        using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
 
-    @using (Html.BeginForm()) {
-        @Html.AntiForgeryToken()
-
-        <div class="form-actions no-color">
-            <input type="submit" value="Delete" class="btn btn-default" /> |
-            @Html.ActionLink("Back to List", "Index")
-        </div>
+            <div class="form-actions no-color">
+                <input type="submit" value="Delete" class="btn btn-default" /> |
+                @Html.ActionLink("Back to List", "Index")
+            </div>
+        }
     }
-</div>
+        @if (userid != Model.User.Id)
+        {
+            
+                <div class="form-actions no-color">
+                    Not yours to delete bruh
+                    @Html.ActionLink("Back to List", "Index")
+                </div>
+            
+        }
+    </div>
