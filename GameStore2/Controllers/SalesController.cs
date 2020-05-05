@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
@@ -11,25 +12,26 @@ using Microsoft.AspNet.Identity;
 
 namespace GameStore2.Controllers
 {
+    [Authorize]
     public class SalesController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        // GET: Sales
+        [AllowAnonymous]
         public ActionResult Index()
         {
             var sales = db.Sales.Include(s => s.Game).Include(s => s.Quality).Include(s => s.User);
             return View(sales.ToList());
         }
 
-        // GET: Sales/Details/5
+        [AllowAnonymous]
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Sale sale = db.Sales.Find(id);
+            Sale sale = db.Sales.Include(s => s.Game).Include(s => s.Quality).Include(s => s.User).SingleOrDefault(x => x.Id == id);
             if (sale == null)
             {
                 return HttpNotFound();
@@ -55,32 +57,55 @@ namespace GameStore2.Controllers
         public ActionResult Create([Bind(Include = "Id,GameId,Quantity,QualityID,price,Userid")] Sale sale)
         {
             sale.Userid = User.Identity.GetUserId();
-            if (ModelState.IsValid)
+            
             {
-                
-                db.Sales.Add(sale);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
 
+            }
+            try
+            {
+                if (ModelState.IsValid)
+                {
+
+                    db.Sales.Add(sale);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+            }
+            catch
+            {
+
+                ViewBag.GameId = new SelectList(db.Games, "Id", "Title", sale.GameId);
+                ViewBag.QualityID = new SelectList(db.Qualities, "Id", "Type", sale.QualityID);
+
+                return View(sale);
+            }
             ViewBag.GameId = new SelectList(db.Games, "Id", "Title", sale.GameId);
             ViewBag.QualityID = new SelectList(db.Qualities, "Id", "Type", sale.QualityID);
-            
+
             return View(sale);
         }
+           
+        
 
-        // GET: Sales/Edit/5
+        
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
             Sale sale = db.Sales.Find(id);
+            var loggedInUser = User.Identity.GetUserId();
+            if (sale.Userid != loggedInUser)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+            }
             if (sale == null)
             {
                 return HttpNotFound();
             }
+          
             ViewBag.GameId = new SelectList(db.Games, "Id", "Title", sale.GameId);
             ViewBag.QualityID = new SelectList(db.Qualities, "Id", "Type", sale.QualityID);
           
@@ -113,11 +138,22 @@ namespace GameStore2.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Sale sale = db.Sales.Find(id);
+
+            Sale sale = db.Sales.Include(s => s.Game).Include(s => s.Quality).Include(s => s.User).SingleOrDefault(x => x.Id == id);
+            
+            
+            var loggedInUser = User.Identity.GetUserId();
+            if (sale.Userid != loggedInUser)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+            }
+
             if (sale == null)
             {
                 return HttpNotFound();
             }
+            ViewBag.GameId = new SelectList(db.Games, "Id", "Title", sale.GameId);
+            ViewBag.QualityID = new SelectList(db.Qualities, "Id", "Type", sale.QualityID);
             return View(sale);
         }
 

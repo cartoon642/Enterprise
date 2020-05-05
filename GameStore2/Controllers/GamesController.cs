@@ -10,18 +10,19 @@ using GameStore2.Models;
 
 namespace GameStore2.Controllers
 {
+    [Authorize]
     public class GamesController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        // GET: Games
+        [AllowAnonymous]
         public ActionResult Index()
         {
             var games = db.Games.Include(g => g.Category);
             return View(games.ToList());
         }
 
-        // GET: Games/Details/5
+        [AllowAnonymous]
         public ActionResult Details(int? id)
         {
             if (id == null)
