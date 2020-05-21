@@ -17,6 +17,7 @@ namespace GameStore2.Models
         public int GameId { get; set; }
         public Game Game { get; set; }
         [Required]
+        [Index("unique", 4, IsUnique = true)]
         public int Quantity { get; set; }
         public Quality Quality { get; set; }
         [Required]

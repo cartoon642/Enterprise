@@ -14,6 +14,7 @@ namespace GameStore2.Controllers
 {
     [RequireHttps]
     [Authorize]
+    [HandleError]
     public class SalesController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();

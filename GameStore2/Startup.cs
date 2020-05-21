@@ -73,8 +73,68 @@ namespace GameStore2
                         }
                     }
                 }
-            }
+                using (UserManager<ApplicationUser> userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context)))
+                {
+                    // First, check if the admin user exists!
+                    if (userManager.FindByName("administrator@yourEmailHost.com") == null)
+                    {
+                        // admin user does not exist - we can create it
+                        ApplicationUser user = new ApplicationUser();
+                        user.UserName = "TestUser1";
+                        user.Email = "Testuser@hotmail.com";
 
+                        string userPWD = "P@ssw0rd_1234";
+
+                        IdentityResult chkUser = userManager.Create(user, userPWD);
+                    }
+                }
+                using (UserManager<ApplicationUser> userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context)))
+                {
+                    // First, check if the admin user exists!
+                    if (userManager.FindByName("administrator@yourEmailHost.com") == null)
+                    {
+                        // admin user does not exist - we can create it
+                        ApplicationUser user = new ApplicationUser();
+                        user.UserName = "TestUser4";
+                        user.Email = "Testuser4@hotmail.com";
+
+                        string userPWD = "P@ssw0rd_1234";
+
+                        IdentityResult chkUser = userManager.Create(user, userPWD);
+                    }
+                }
+                using (UserManager<ApplicationUser> userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context)))
+                {
+                    // First, check if the admin user exists!
+                    if (userManager.FindByName("administrator@yourEmailHost.com") == null)
+                    {
+                        // admin user does not exist - we can create it
+                        ApplicationUser user = new ApplicationUser();
+                        user.UserName = "TestUser2";
+                        user.Email = "Testuser2@hotmail.com";
+
+                        string userPWD = "P@ssw0rd_1234";
+
+                        IdentityResult chkUser = userManager.Create(user, userPWD);
+                    }
+                }
+                using (UserManager<ApplicationUser> userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context)))
+                {
+                    // First, check if the admin user exists!
+                    if (userManager.FindByName("administrator@yourEmailHost.com") == null)
+                    {
+                        // admin user does not exist - we can create it
+                        ApplicationUser user = new ApplicationUser();
+                        user.UserName = "TestUser3";
+                        user.Email = "Testuser3@hotmail.com";
+
+                        string userPWD = "P@ssw0rd_1234";
+
+                        IdentityResult chkUser = userManager.Create(user, userPWD);
+                    }
+                }
+
+            }
         }
     }
 }
